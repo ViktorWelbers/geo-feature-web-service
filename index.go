@@ -1,25 +1,22 @@
 package main
 
 import (
+	"backend/handlers"
 	"github.com/gorilla/mux"
+	"log"
 	"net/http"
 )
 
-type Movie struct {
-	MovieID   string `json:"movieid"`
-	MovieName string `json:"moviename"`
-}
-
-type JsonResponse struct {
-	Type    string  `json:"type"`
-	Data    []Movie `json:"data"`
-	Message string  `json:"message"`
+func routing(r *mux.Router) {
+	r.HandleFunc("/", handlers.HomeHandler)
+	r.HandleFunc("/products", handlers.ProductsHandler).Methods("GET")
+	r.HandleFunc("/articles", handlers.ArticlesHandler).Methods("GET")
 }
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/", HomeHandler)
-	r.HandleFunc("/products", ProductsHandler)
-	r.HandleFunc("/articles", ArticlesHandler)
+	routing(r)
 	http.Handle("/", r)
+	// Bind to a port and pass our router in
+	log.Fatal(http.ListenAndServe(":8000", r))
 }
