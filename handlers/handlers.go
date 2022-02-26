@@ -2,18 +2,18 @@ package handlers
 
 import (
 	"backend/controllers"
-	"backend/models"
+	db "backend/database"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	jsonObj := models.JsonResponse{Type: "Web-API", Data: "Empty", Message: "Server is running"}
-
+	jsonObj := db.ImportFeatures()
 	payload, err := json.Marshal(jsonObj)
 	if err != nil {
 		fmt.Println(err)
@@ -24,17 +24,18 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func BoundingBoxHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("ACCEPT GET /get-features/{lon}/{lat}/{radius}", time.Now().Format("01-02-2006 15:04:05"))
 	vars := mux.Vars(r)
-
-	lat, _ := strconv.ParseFloat(vars["lat"], 64)
-	lon, _ := strconv.ParseFloat(vars["lon"], 64)
-	radius, _ := strconv.ParseFloat(vars["radius"], 64)
-
+	w.Header().Set("Content-Type", "application/json")
+	lat, err1 := strconv.ParseFloat(vars["lat"], 64)
+	lon, err2 := strconv.ParseFloat(vars["lon"], 64)
+	radius, err3 := strconv.ParseFloat(vars["radius"], 64)
+	if err1 != nil || err2 != nil || err3 != nil {
+		http.Error(w, "One of the given values is not numeric", http.StatusBadRequest)
+		return
+	}
 	payload := GeoDataController.GetFeatureVectors(lat, lon, radius)
 
 	w.Write(payload)
-}
-
-func ArticlesHandler(w http.ResponseWriter, r *http.Request) {
-	println("cancer")
+	fmt.Println("COMPLETE GET /get-features/{lon}/{lat}/{radius}", time.Now().Format("01-02-2006 15:04:05"))
 }

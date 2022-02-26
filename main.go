@@ -12,7 +12,6 @@ import (
 func AddRoutes(r *mux.Router) {
 	r.HandleFunc("/", handlers.HomeHandler)
 	r.HandleFunc("/get-features/{lon}/{lat}/{radius}", handlers.BoundingBoxHandler).Methods("GET")
-	r.HandleFunc("/articles", handlers.ArticlesHandler).Methods("GET")
 }
 
 func main() {
@@ -24,8 +23,7 @@ func main() {
 	// Bind to a port and pass our router in
 	db := database.GetDBConnection()
 	fmt.Printf("Database Running on Port %d \n", database.Port)
-
-	defer db.Close()
+	_ = db.Close()
 
 	fmt.Println("Web server running on 8000")
 	log.Fatal(http.ListenAndServe(":8000", r))

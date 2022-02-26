@@ -43,15 +43,15 @@ func GetFeatureVectors(lat float64, lon float64, radius float64) []byte {
 	defer rows.Close()
 
 	df := pd.LoadMaps(store, pd.NaNValues([]string{}))
-	feature_map := transformDataframeToFeatureVector(df)
+	feature_map := transformDataframeToFeatureVector(&df)
 	js, _ := json.Marshal(feature_map)
 
 	return js
 }
 
 // Transform the dataframe
-func transformDataframeToFeatureVector(df pd.DataFrame) map[string]int {
-	//final_df := pd.DataFrame{}
+func transformDataframeToFeatureVector(df *pd.DataFrame) map[string]int {
+
 	column_map := make(map[string]int)
 
 	var column_names []string
@@ -76,4 +76,8 @@ func transformDataframeToFeatureVector(df pd.DataFrame) map[string]int {
 		}
 	}
 	return column_map
+}
+
+func ImportFeatureList() {
+
 }

@@ -3,7 +3,10 @@ package database
 import (
 	"backend/models"
 	"database/sql"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -30,8 +33,22 @@ func (db *DBConnection) QueryFeatureVectors(gps models.GPSCoordinates, radius fl
 	return rows, nil
 }
 
-func (db *DBConnection) InsertDataset() {
-	return
+func ImportFeatures() map[string]interface{} {
+	var output map[string]interface{}
+	jsonFile, err := os.Open("database/feature_list.json")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	err = json.Unmarshal(byteValue, &output)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+
+	return output
 }
 
 // Establish a Database Connection
