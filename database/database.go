@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"reflect"
 
 	_ "github.com/lib/pq"
 )
@@ -33,22 +34,44 @@ func (db *DBConnection) QueryFeatureVectors(gps models.GPSCoordinates, radius fl
 	return rows, nil
 }
 
-func ImportFeatures() map[string]interface{} {
+type featureEnumerator struct {
+	Features []string
+}
+
+var AllFeatures featureEnumerator
+
+func (f *featureEnumerator) ImportFeaturesFromJSON() {
+	f.Features = getAllColumns()
+}
+
+func getAllColumns() []string {
 	var output map[string]interface{}
 	jsonFile, err := os.Open("database/feature_list.json")
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		panic(err)
 	}
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	err = json.Unmarshal(byteValue, &output)
 	if err != nil {
 		fmt.Println(err)
-		return nil
+		panic(err)
 	}
 
-	return output
+	all_columns := []string{}
+	for _, value := range output {
+		iter := reflect.ValueOf(value).MapRange()
+		for iter.Next() {
+			innerValueInterface := iter.Value().Interface().([]interface{})
+			columns := make([]string, len(innerValueInterface))
+			for i, v := range innerValueInterface {
+				columns[i] = v.(string)
+			}
+			all_columns = append(all_columns, columns...)
+		}
+	}
+	return all_columns
 }
 
 // Establish a Database Connection

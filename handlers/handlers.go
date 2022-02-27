@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"backend/controllers"
-	db "backend/database"
+	"backend/database"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -13,7 +13,7 @@ import (
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	jsonObj := db.ImportFeatures()
+	jsonObj := database.AllFeatures.Features
 	payload, err := json.Marshal(jsonObj)
 	if err != nil {
 		fmt.Println(err)

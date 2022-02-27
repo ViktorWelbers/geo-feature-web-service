@@ -75,9 +75,11 @@ func transformDataframeToFeatureVector(df *pd.DataFrame) map[string]int {
 			}
 		}
 	}
+	for _, v := range database.AllFeatures.Features {
+		if _, ok := column_map[v]; !ok {
+			column_map[v] = 0
+		}
+	}
+
 	return column_map
-}
-
-func ImportFeatureList() {
-
 }

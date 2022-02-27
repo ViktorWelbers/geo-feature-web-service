@@ -17,14 +17,19 @@ func AddRoutes(r *mux.Router) {
 func main() {
 	r := mux.NewRouter()
 
-	AddRoutes(r)
+	// Test Connection with Database and Close it
+	db := database.GetDBConnection()
+	_ = db.Close()
+	fmt.Printf("Database Running on Port %d \n", database.Port)
+
+	// Import Feature Vector from JSON
+	database.AllFeatures.ImportFeaturesFromJSON()
+
+	// Add Routes to our Router
 	http.Handle("/", r)
+	AddRoutes(r)
 
 	// Bind to a port and pass our router in
-	db := database.GetDBConnection()
-	fmt.Printf("Database Running on Port %d \n", database.Port)
-	_ = db.Close()
-
 	fmt.Println("Web server running on 8000")
 	log.Fatal(http.ListenAndServe(":8000", r))
 
