@@ -12,7 +12,11 @@ import (
 func GetFeatureVectors(lat float64, lon float64, radius float64) []byte {
 
 	gps := models.GPSCoordinates{Lat: lat, Lon: lon}
-	db := database.GetDBConnection()
+	db, err := database.GetDBConnection()
+	if err != nil {
+		fmt.Println(err)
+		panic(err)
+	}
 	rows, err := db.QueryFeatureVectors(gps, radius)
 	if err != nil {
 		fmt.Println(err)

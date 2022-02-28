@@ -9,6 +9,8 @@ require (
 )
 
 require (
+	github.com/streadway/amqp v1.0.0 // indirect
+	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6 // indirect
 	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	gonum.org/v1/gonum v0.9.1 // indirect
 )

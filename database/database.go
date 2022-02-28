@@ -75,15 +75,15 @@ func getAllColumns() []string {
 }
 
 // Establish a Database Connection
-func GetDBConnection() *DBConnection {
+func GetDBConnection() (*DBConnection, error) {
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", Host, Port, User, Password, DBName)
 
 	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
 		fmt.Println(err)
-		panic(err)
+		return nil, err
 	}
 	db.Exec("CREATE EXTENSION IF NOT EXISTS postgis")
 
-	return &DBConnection{db}
+	return &DBConnection{db}, nil
 }
