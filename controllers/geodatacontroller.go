@@ -3,20 +3,15 @@ package GeoDataController
 import (
 	"backend/database"
 	"backend/models"
-	"encoding/json"
 	"fmt"
 	pd "github.com/go-gota/gota/dataframe"
 	"github.com/go-gota/gota/series"
 )
 
-func GetFeatureVectors(lat float64, lon float64, radius float64) []byte {
+func GetFeatureVectors(lat float64, lon float64, radius float64, db *database.DBConnection) map[string]int {
 
 	gps := models.GPSCoordinates{Lat: lat, Lon: lon}
-	db, err := database.GetDBConnection()
-	if err != nil {
-		fmt.Println(err)
-		panic(err)
-	}
+
 	rows, err := db.QueryFeatureVectors(gps, radius)
 	if err != nil {
 		fmt.Println(err)
@@ -48,9 +43,8 @@ func GetFeatureVectors(lat float64, lon float64, radius float64) []byte {
 
 	df := pd.LoadMaps(store, pd.NaNValues([]string{}))
 	feature_map := transformDataframeToFeatureVector(&df)
-	js, _ := json.Marshal(feature_map)
 
-	return js
+	return feature_map
 }
 
 // Transform the dataframe

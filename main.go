@@ -4,32 +4,30 @@ import (
 	"backend/database"
 	"backend/handlers"
 	"fmt"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
 )
 
 func main() {
-	router := mux.NewRouter()
+	router := gin.Default()
+	router.SetTrustedProxies([]string{"192.168.1.2"})
 
 	// Test Connection with Database and Close it
-	db, err := database.GetDBConnection()
-	if err != nil {
-		fmt.Println(err)
-		panic(err)
-	}
+	db := database.NewDBConnection()
 	_ = db.Close()
-	fmt.Printf("Database Running on Port %d \n", database.Port)
 
 	// Import Feature Vector from JSON
 	database.AllFeatures.ImportFeaturesFromJSON()
 
 	// Add Routes to our Routes
-	router.HandleFunc("/", handlers.HomeHandler)
-	router.HandleFunc("/get-features/{lon}/{lat}/{radius}", handlers.BoundingBoxHandler).Methods("GET")
+	router.GET("/", handlers.HomeHandler)
+	v1 := router.Group("/v1")
+	{
+		v1.GET("/:lon/:lat/:radius", handlers.BoundingBoxHandler)
+	}
 
 	// Bind to a port and pass our router in
-	fmt.Println("Web server running on 8000")
-	log.Fatal(http.ListenAndServe(":8000", router))
+	fmt.Println("Web server running on 8080")
+	log.Fatal(router.Run(":8080"))
 
 }
