@@ -83,3 +83,4 @@ fabric.properties
 
 osm_data/
 # End of https://www.toptal.com/developers/gitignore/api/goland
+vendor/
