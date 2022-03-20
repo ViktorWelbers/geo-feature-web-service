@@ -2,7 +2,26 @@
 
 This Project implements APIs that help to generate geo-spatial datasets for Machine Learning purposes
 
-Frontend is tbd
+To receive a feature vector for a specific lat-long and radius (in Meters) the following GET-Requests are available:
+
+
+
+To get a JSON with aggregated entries for every feature:
+
+`/v1/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
+
+
+
+To get a JSON that is easier to use for a regular frontend (Angular, React etc.) you can use :
+
+`/v2/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
+
+Here a JSON with a single key `data` is returned that stores the key value pairs
+
+
+
+
+
 
 To setup the PostGIS database you need to setup the following docker image runing as a service:
 
