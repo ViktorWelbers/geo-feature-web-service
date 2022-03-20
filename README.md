@@ -12,7 +12,7 @@ To get a JSON with aggregated entries for every feature:
 
 
 
-To get a JSON that is easier to use for a regular frontend (Angular, React etc.) you can use :
+To get a JSON that is easier to use for a frontend framework (such as React, Angular etc) you can use :
 
 `/v2/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
 
