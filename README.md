@@ -4,7 +4,7 @@ This Project implements APIs that help to generate geo-spatial datasets for Mach
 
 To receive a feature vector for a specific lat-long and radius (in Meters) the following GET-Requests are available:
 
-
+<h2>Usage</h2>
 
 To get a JSON with aggregated entries for every feature:
 
@@ -21,7 +21,7 @@ Here a JSON with a single key `data` is returned that stores the key value pairs
 <br/><br/>
 <br/><br/>
 
-
+<h2>DB Setup</h2>
 
 To setup the PostGIS database you need to setup the following docker image runing as a service:
 
