@@ -18,8 +18,8 @@ To get a JSON that is easier to use for a regular frontend (Angular, React etc.)
 
 Here a JSON with a single key `data` is returned that stores the key value pairs
 
-
-
+<br/><br/>
+<br/><br/>
 
 
 
