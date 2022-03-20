@@ -10,15 +10,13 @@ To get a JSON with aggregated entries for every feature:
 
 `/v1/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
 
-
+<br/><br/>
 
 To get a JSON that is easier to use for a frontend framework (such as React, Angular etc) you can use :
 
 `/v2/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
 
 Here a JSON with a single key `data` is returned that stores the key value pairs
-
-<br/><br/>
 
 
 <h2>DB Setup</h2>
