@@ -1,4 +1,4 @@
-package models
+package entities
 
 type GPSCoordinates struct {
 	Lat, Lon, Radius float64

@@ -1,8 +1,8 @@
-package GeoDataController
+package usecases
 
 import (
-	"backend/app/database"
-	"backend/app/models"
+	"backend/app/entities"
+	"backend/app/repositories"
 	"database/sql"
 	"errors"
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"strconv"
 )
 
-func GetFeatureVectors(gps models.GPSCoordinates, db *database.DBConnection) map[string]int {
+func GetFeatureVectors(gps entities.GPSCoordinates, db *repositories.DBConnection) map[string]int {
 
 	rows, err := db.QueryFeatureVectors(gps.Lat, gps.Lon, gps.Radius)
 	if err != nil {
@@ -79,7 +79,7 @@ func transformDfToFeatureMap(df *pd.DataFrame) map[string]int {
 			}
 		}
 	}
-	for _, v := range database.AllFeatures.Features {
+	for _, v := range repositories.AllFeatures.Features {
 		if _, ok := columnMap[v]; !ok {
 			columnMap[v] = 0
 		}
@@ -88,12 +88,12 @@ func transformDfToFeatureMap(df *pd.DataFrame) map[string]int {
 	return columnMap
 }
 
-func ParseGeoRequest(latString string, lonString string, radiusString string) (models.GPSCoordinates, error) {
+func ParseGeoRequest(latString string, lonString string, radiusString string) (entities.GPSCoordinates, error) {
 	lat, err1 := strconv.ParseFloat(latString, 64)
 	lon, err2 := strconv.ParseFloat(lonString, 64)
 	radius, err3 := strconv.ParseFloat(radiusString, 64)
 	if err1 != nil || err2 != nil || err3 != nil {
-		return models.GPSCoordinates{}, errors.New("error when trying to parse values. please provide numerical")
+		return entities.GPSCoordinates{}, errors.New("error when trying to parse values. please provide numerical")
 	}
-	return models.GPSCoordinates{Lat: lat, Lon: lon, Radius: radius}, nil
+	return entities.GPSCoordinates{Lat: lat, Lon: lon, Radius: radius}, nil
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	"backend/app/database"
 	"backend/app/handlers"
+	"backend/app/repositories"
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"
@@ -16,21 +16,18 @@ func main() {
 		logger.Fatal(err)
 	}
 
-	// Test Connection with Database and Close it
-	db := database.NewDBConnection()
-	_ = db.Close()
-	// Import Feature Vector from JSON
-	database.AllFeatures.ImportFeaturesFromJSON()
+	// Import Feature Vector from JSON-File
+	repositories.AllFeatures.ImportFeaturesFromJSON()
 
 	// Add Routes to our Routes
 	router.GET("/", handlers.NewHandler(nil, logger).Home)
 	v1 := router.Group("/v1")
 	{
-		v1.GET("/:lon/:lat/:radius", handlers.NewHandler(database.NewDBConnection(), logger).BoundingBox)
+		v1.GET("/:lon/:lat/:radius", handlers.NewHandler(repositories.NewDBConnection(), logger).BoundingBox)
 	}
 	v2 := router.Group("/v2")
 	{
-		v2.GET("/:lon/:lat/:radius", handlers.NewHandler(database.NewDBConnection(), logger).FrontendPass)
+		v2.GET("/:lon/:lat/:radius", handlers.NewHandler(repositories.NewDBConnection(), logger).FrontendPass)
 	}
 	// Bind to a port and pass our router in
 	logger.Println("Web server running on 8080")
