@@ -1,7 +1,6 @@
 package database
 
 import (
-	"backend/models"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -33,8 +32,8 @@ func (db *DBConnection) CheckAvailability() {
 	fmt.Printf("Database Running on Port %d \n", Port)
 }
 
-func (db *DBConnection) QueryFeatureVectors(gps models.GPSCoordinates, radius float64) (feature_vector *sql.Rows, error error) {
-	query := fmt.Sprintf("SELECT amenity, barrier, bicycle, boundary, building, construction, highway,  water, waterway, power, motorcar , covered ,cutting , disused , embankment, historic, landuse, leisure, man_made, office, oneway, place, public_transport, railway, religion, route, service, shop, sport, surface, tourism, tunnel  FROM planet_osm_point WHERE ST_DWithin(way, ST_GeogFromText('SRID=4326;POINT(%f %f)') , %f, false);", gps.Lon, gps.Lat, radius)
+func (db *DBConnection) QueryFeatureVectors(lat float64, lon float64, radius float64) (featureVector *sql.Rows, error error) {
+	query := fmt.Sprintf("SELECT amenity, barrier, bicycle, boundary, building, construction, highway,  water, waterway, power, motorcar , covered ,cutting , disused , embankment, historic, landuse, leisure, man_made, office, oneway, place, public_transport, railway, religion, route, service, shop, sport, surface, tourism, tunnel  FROM planet_osm_point WHERE ST_DWithin(way, ST_GeogFromText('SRID=4326;POINT(%f %f)') , %f, false);", lon, lat, radius)
 	rows, err := db.Query(query)
 	if err != nil {
 		fmt.Println(err)
@@ -61,6 +60,14 @@ func getAllColumns() []string {
 		panic(err)
 	}
 
+	defer func(jsonFile *os.File) {
+		err := jsonFile.Close()
+		if err != nil {
+			fmt.Println(err)
+			panic(err)
+		}
+	}(jsonFile)
+
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	err = json.Unmarshal(byteValue, &output)
 	if err != nil {
@@ -68,7 +75,7 @@ func getAllColumns() []string {
 		panic(err)
 	}
 
-	all_columns := []string{}
+	var allColumns []string
 	for _, value := range output {
 		iter := reflect.ValueOf(value).MapRange()
 		for iter.Next() {
@@ -77,17 +84,17 @@ func getAllColumns() []string {
 			for i, v := range innerValueInterface {
 				columns[i] = v.(string)
 			}
-			all_columns = append(all_columns, columns...)
+			allColumns = append(allColumns, columns...)
 		}
 	}
-	return all_columns
+
+	return allColumns
 }
 
-// Establish a Database Connection
 func NewDBConnection() *DBConnection {
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", Host, Port, User, Password, DBName)
+	psqlConn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", Host, Port, User, Password, DBName)
 
-	conn, err := sql.Open("postgres", psqlconn)
+	conn, err := sql.Open("postgres", psqlConn)
 	if err != nil {
 		_ = conn.Close()
 		fmt.Println(err)
@@ -96,7 +103,10 @@ func NewDBConnection() *DBConnection {
 
 	db := &DBConnection{conn}
 	db.CheckAvailability()
-	db.Exec("CREATE EXTENSION IF NOT EXISTS postgis")
+	_, err = db.Exec("CREATE EXTENSION IF NOT EXISTS postgis")
+	if err != nil {
+		panic(err)
+	}
 
 	return db
 }
