@@ -44,7 +44,7 @@ To get a JSONL with aggregated entries for every feature:
 
 `/v1/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
 
-<br/><br/>
+<br/>
 
 To get a JSON that is easier to use for a frontend framework (such as React, Angular etc) you can use :
 
