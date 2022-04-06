@@ -22,14 +22,14 @@ func NewHandler(db *repositories.DBConnection, logger *log.Logger) *Handlers {
 }
 
 func (h *Handlers) Home(c *gin.Context) {
-	h.Logger.Println("Accessing Home")
+	h.Logger.Println("GET /")
 	c.Writer.Header().Set("Content-Type", "application/json")
 	jsonObj := repositories.AllFeatures.Features
 	c.JSON(http.StatusOK, jsonObj)
 }
 
 func (h *Handlers) BoundingBox(c *gin.Context) {
-	h.Logger.Println("Creating BoundingBox for ", c.Param("lat"), c.Param("lon"), c.Param("radius"))
+	h.Logger.Println("GET | BoundingBox ", c.Param("lat"), c.Param("lon"), c.Param("radius"))
 	c.Writer.Header().Set("Content-Type", "application/json")
 	gpsObject, err := usecases.ParseGeoRequest(c.Param("lat"), c.Param("lon"), c.Param("radius"))
 	if err != nil {
@@ -42,7 +42,7 @@ func (h *Handlers) BoundingBox(c *gin.Context) {
 }
 
 func (h *Handlers) FrontendPass(c *gin.Context) {
-	h.Logger.Println("Creating Frontend BoundingBox for ", c.Param("lat"), c.Param("lon"), c.Param("radius"))
+	h.Logger.Println("GET | Frontend BoundingBox ", c.Param("lat"), c.Param("lon"), c.Param("radius"))
 	c.Writer.Header().Set("Content-Type", "application/json")
 	gpsObject, err := usecases.ParseGeoRequest(c.Param("lat"), c.Param("lon"), c.Param("radius"))
 	if err != nil {

@@ -15,7 +15,7 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	}
-
+	repositories.WaitForDB(logger)
 	// Import Feature Vector from JSON-File
 	repositories.AllFeatures.ImportFeaturesFromJSON()
 

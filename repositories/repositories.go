@@ -5,8 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"reflect"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -19,17 +21,10 @@ const (
 	DBName   = "postgres"
 )
 
+var connectionString = fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", Host, Port, User, Password, DBName)
+
 type DBConnection struct {
 	*sql.DB
-}
-
-func (db *DBConnection) CheckAvailability() {
-	if err := db.Ping(); err != nil {
-		_ = db.Close()
-		fmt.Println(err)
-		panic(err)
-	}
-	fmt.Printf("Database Running on Port %d \n", Port)
 }
 
 func (db *DBConnection) QueryFeatureVectors(lat float64, lon float64, radius float64) (featureVector *sql.Rows, error error) {
@@ -92,21 +87,40 @@ func getAllColumns() []string {
 }
 
 func NewDBConnection() *DBConnection {
-	psqlConn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", Host, Port, User, Password, DBName)
-
-	conn, err := sql.Open("postgres", psqlConn)
+	conn, err := sql.Open("postgres", connectionString)
 	if err != nil {
 		_ = conn.Close()
 		fmt.Println(err)
-		panic(err)
 	}
 
 	db := &DBConnection{conn}
-	db.CheckAvailability()
 	_, err = db.Exec("CREATE EXTENSION IF NOT EXISTS postgis")
 	if err != nil {
 		panic(err)
 	}
 
 	return db
+}
+
+func WaitForDB(logger *log.Logger) {
+
+	for {
+
+		logger.Printf("Waiting for Database to be ready")
+
+		db, err := sql.Open("postgres", connectionString)
+		if err != nil {
+			logger.Println(err.Error())
+		}
+
+		err = db.Ping()
+		if err == nil {
+			logger.Printf("Database Running on Port %d \n", Port)
+			break
+		}
+
+		time.Sleep(1 * time.Second)
+		continue
+	}
+
 }
