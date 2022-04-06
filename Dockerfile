@@ -1,11 +1,22 @@
-FROM golang:1.17
-WORKDIR /go/src/github.com/alexellis/href-counter/
-RUN go get -d -v golang.org/x/net/html
-COPY app.go ./
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+FROM golang:latest
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-WORKDIR /root/
-COPY --from=0 /go/src/github.com/alexellis/href-counter/app ./
-CMD ["./app"]  
+MAINTAINER Maintainer
+
+ENV GIN_MODE=release
+ENV PORT=3004
+
+WORKDIR /go/src/go-docker-dev.to
+
+COPY app /go/src/go-docker-dev.to/src
+
+# Run the two commands below to install git and dependencies for the project.
+# RUN apk update && apk add --no-cache git
+# RUN go get ./...
+
+COPY dependencies /go/src
+
+RUN go build go-docker-dev.to/src/app
+
+EXPOSE $PORT
+
+ENTRYPOINT ["./app"]
