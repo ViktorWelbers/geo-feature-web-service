@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	Host     = "localhost"
+	Host     = "composepostgres"
 	Port     = 5432
 	User     = "postgres"
 	Password = "mysecretpassword"

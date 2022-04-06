@@ -2,15 +2,17 @@ version: "3.9"
 services:
   database:
     container_name: composepostgres
+    restart: always
     image: postgis/postgis
     environment:
       POSTGRES_PASSWORD: mysecretpassword
     networks:
       - fullstack
     ports:
-      - "5432:5432"
+      - "5433:5432"
   server:
     container_name: golang-service
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
