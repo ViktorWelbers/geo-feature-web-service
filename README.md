@@ -38,7 +38,7 @@ To load the OpenStreetMap data into PostGIS from scratch the following procedure
 
     `osm2pgsql -U postgres -W -d postgres -H localhost -s -P 5433  -l nrw_nodes.osm`
 
-<h2>Usage</h2>
+<h2>API Usage</h2>
 
 To get a JSONL with aggregated entries for every feature:
 
