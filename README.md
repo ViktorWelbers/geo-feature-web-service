@@ -6,7 +6,7 @@ To receive a feature vector for a specific lat-long and radius (in Meters) the f
 
 <h2>Usage</h2>
 
-To get a JSON with aggregated entries for every feature:
+To get a JSONL with aggregated entries for every feature:
 
 `/v1/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
 
