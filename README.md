@@ -11,8 +11,10 @@ To Start the service, type `docker-compose up` at root level
 The PostGIS database you need, is already accounted for in the docker-compose.yaml:
 Credentials are:
 
-> password = mysecretpassword
+> password = mysecretpassword 
+
 > user = postgres
+
 > port = 5433
 
 To load the OpenStreetMap data into PostGIS from scratch the following procedure needs to be done:
