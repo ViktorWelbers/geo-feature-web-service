@@ -1,42 +1,20 @@
-# Geo API Backend
+# geo-feature-web-service
 
 This Project implements APIs that help to generate geo-spatial datasets for Machine Learning purposes
 
 To receive a feature vector for a specific lat-long and radius (in Meters) the following GET-Requests are available:
 
-<h2>Usage</h2>
-
-To get a JSONL with aggregated entries for every feature:
-
-`/v1/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
-
-<br/><br/>
-
-To get a JSON that is easier to use for a frontend framework (such as React, Angular etc) you can use :
-
-`/v2/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
-
-Here a JSON with a single key `data` is returned that stores the key value pairs
-
+To Start the service, type `docker-compose up` at root level
 
 <h2>DB Setup</h2>
 
-To setup the PostGIS database you need to setup the following docker image runing as a service:
+The PostGIS database you need, is already accounted for in the docker-compose.yaml. 
 
-`docker pull postgis/postgis`
+> password = mysecretpassword 
 
-To make the service available in the local network a port mapping needs to be done from 5432 to a free port in the local network.
-So in order to start a server you can run the following command:
+> user = postgres
 
-
-`docker run --name postgis-server -e POSTGRES_PASSWORD=mysecretpassword -p 5433:5432 -d postgis/postgis `
-
-Connect to postgis DB and create Hstore extension:
-
-`sudo -u postgres psql -h localhost -p 5433`
-
- `CREATE extension hstore;`
-
+> port = 5433
 
 To load the OpenStreetMap data into PostGIS from scratch the following procedure needs to be done:
 
@@ -51,7 +29,7 @@ To load the OpenStreetMap data into PostGIS from scratch the following procedure
     `sudo apt-get install -y osm2pgsql`
 
 
-4. Convert nordrhein-westfalen-latest.osm.pbf to "only nodes" for easy queries over single geometry:
+4. Convert osm.pbf for desired region (here the federal state of nordrhein-westfalen) to "only nodes" for easy queries over single geometry:
 
     `osmconvert nordrhein-westfalen-latest.osm.pbf  --all-to-nodes --max-objects=180000000  --object-type-offset=18000000000+1 -o=nrw_nodes.osm`
 
@@ -59,19 +37,18 @@ To load the OpenStreetMap data into PostGIS from scratch the following procedure
 
     `osm2pgsql -U postgres -W -d postgres -H localhost -s -P 5433  -l nrw_nodes.osm`
 
+<h2>API Usage</h2>
 
+To get a JSONL with aggregated entries for every feature:
 
-To set up a local nominatim API in docker to query for postalcodes or cities for certain GPS-Coordinates, use the following command:
+`/v1/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
 
-`
-docker run -it --rm --shm-size=1g 
--e PBF_URL=https://download.geofabrik.de/europe/germany/nordrhein-westfalen-latest.osm.pbf 
--e REPLICATION_URL= http://download.geofabrik.de/europe/germany/nordrhein-westfalen-updates/ 
--e IMPORT_WIKIPEDIA=false 
--e NOMINATIM_PASSWORD=very_secure_password 
--v nominatim-data:/var/lib/postgresql/12/main 
--p 8080:8080 
---name nominatim 
-mediagis/nominatim:3.7
-`
+<br/>
+
+To get a JSON that is easier to use for a frontend framework (such as React, Angular etc) you can use :
+
+`/v2/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
+
+Here a JSON with a key `data` at the highest level is returned, which stores the key value pairs
+
 
