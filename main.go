@@ -1,8 +1,8 @@
 package main
 
 import (
-	"backend/handlers"
-	"backend/repositories"
+	"geo-api-backend/handlers"
+	"geo-api-backend/repositories"
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"

@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"backend/entities"
-	"backend/repositories"
-	"backend/usecases"
+	"geo-api-backend/entities"
+	"geo-api-backend/repositories"
+	"geo-api-backend/usecases"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

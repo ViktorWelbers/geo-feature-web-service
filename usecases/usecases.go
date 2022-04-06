@@ -1,11 +1,11 @@
 package usecases
 
 import (
-	"backend/entities"
-	"backend/repositories"
 	"database/sql"
 	"errors"
 	"fmt"
+	"geo-api-backend/entities"
+	"geo-api-backend/repositories"
 	pd "github.com/go-gota/gota/dataframe"
 	"github.com/go-gota/gota/series"
 	"strconv"

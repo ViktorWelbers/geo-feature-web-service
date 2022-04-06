@@ -1,4 +1,4 @@
-module backend
+module geo-api-backend
 
 go 1.17
 
