@@ -49,6 +49,6 @@ To get a JSON that is easier to use for a frontend framework (such as React, Ang
 
 `/v2/{LONGTITUDE}/{LATITUDE}/{RADIUS}`
 
-Here a JSON with a single key `data` is returned that stores the key value pairs
+Here a JSON with a key `data` at the highest level is returned, which stores the key value pairs
 
 
