@@ -29,7 +29,7 @@ To load the OpenStreetMap data into PostGIS from scratch the following procedure
     `sudo apt-get install -y osm2pgsql`
 
 
-4. Convert nordrhein-westfalen-latest.osm.pbf to "only nodes" for easy queries over single geometry:
+4. Convert osm.pbf for desired region (here the federal state of nordrhein-westfalen) to "only nodes" for easy queries over single geometry:
 
     `osmconvert nordrhein-westfalen-latest.osm.pbf  --all-to-nodes --max-objects=180000000  --object-type-offset=18000000000+1 -o=nrw_nodes.osm`
 
