@@ -54,7 +54,7 @@ func (f *featureEnumerator) ImportFeaturesFromJSON() {
 
 func getAllColumns() []string {
 	var output map[string]interface{}
-	jsonFile, err := os.Open("app/repositories/feature_list.json")
+	jsonFile, err := os.Open("repositories/feature_list.json")
 	if err != nil {
 		fmt.Println(err)
 		panic(err)

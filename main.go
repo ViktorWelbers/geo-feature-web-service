@@ -1,8 +1,8 @@
 package main
 
 import (
-	"backend/app/handlers"
-	"backend/app/repositories"
+	"backend/handlers"
+	"backend/repositories"
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"

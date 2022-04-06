@@ -1,9 +1,9 @@
 package handlers
 
 import (
-	"backend/app/entities"
-	"backend/app/repositories"
-	"backend/app/usecases"
+	"backend/entities"
+	"backend/repositories"
+	"backend/usecases"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

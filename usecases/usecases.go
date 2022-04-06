@@ -1,8 +1,8 @@
 package usecases
 
 import (
-	"backend/app/entities"
-	"backend/app/repositories"
+	"backend/entities"
+	"backend/repositories"
 	"database/sql"
 	"errors"
 	"fmt"
