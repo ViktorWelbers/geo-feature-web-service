@@ -8,8 +8,7 @@ To Start the service, type `docker-compose up` at root level
 
 <h2>DB Setup</h2>
 
-The PostGIS database you need, is already accounted for in the docker-compose.yaml:
-Credentials are:
+The PostGIS database you need, is already accounted for in the docker-compose.yaml. 
 
 > password = mysecretpassword 
 
